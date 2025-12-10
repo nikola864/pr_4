@@ -1,0 +1,11 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<h1>Главная страница</h1>
+{% if user.is_authenticated %}
+    <p>Вы вошли как <b>{{ user.username }}</b>.</p>
+    <a href="{% url 'protected' %}">Перейти на защищенную страницу</a>
+{% else %}
+    <p>Пожалуйста, <a href="{% url 'login' %}">войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a>.</p>
+{% endif %}
+{% endblock %}
