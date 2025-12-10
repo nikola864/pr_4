@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.12" ]  # ✅ вы используете Python 3.12
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check code style with flake8
+        run: |
+          flake8 . --max-line-length=120 --exclude=migrations
+
+      - name: Run tests with pytest
+        env:
+          DJANGO_SETTINGS_MODULE: auth_project.settings
+        run: |
+          python manage.py migrate --run-syncdb
+          pytest
