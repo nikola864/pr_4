@@ -30,5 +30,5 @@ class AuthViewsTest(TestCase):
             'password2': 'strongpass123!'
         })
         self.assertRedirects(response, reverse('home'))
-        self.assertTrue(User.objects.filter(username='newuser').exists()
+        self.assertTrue(User.objects.filter(username='newuser').exists())
 
